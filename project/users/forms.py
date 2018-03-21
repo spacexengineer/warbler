@@ -8,6 +8,9 @@ class UserForm(FlaskForm):
     email = StringField('email', validators=[DataRequired(), Email()])
     image_url = StringField('image_url')
     password = PasswordField('password', validators=[Length(min=6)])
+    location = StringField('location')
+    bio = StringField('bio')
+    header_image_url = StringField('header_image_url')
 
 
 class LoginForm(FlaskForm):

@@ -129,6 +129,9 @@ def show(id):
             if User.authenticate(found_user.username, form.password.data):
                 found_user.username = form.username.data
                 found_user.email = form.email.data
+                found_user.location = form.location.data or ""
+                found_user.bio = form.bio.data or ""
+                found_user.header_image_url = form.header_image_url.data or ""
                 found_user.image_url = form.image_url.data or None
                 db.session.add(found_user)
                 db.session.commit()

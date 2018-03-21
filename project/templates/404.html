@@ -6,7 +6,7 @@
   <h1>Page Not Found</h1>
   <p>What you were looking for is just not there.</p>
   <p><a href="{{ url_for('users.index') }}">
-      <img href="" alt="404 image" width="30rem" height="auto">
+      <img src="{{ url_for('static', filename='images/404.jpg') }}" alt="404 image" width="475rem" height="auto" border="3px solid black">
   </a></p>
 {% endblock %}
   
