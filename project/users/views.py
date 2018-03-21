@@ -1,13 +1,24 @@
-from flask import redirect, render_template, request, url_for, Blueprint, flash
+from flask import redirect, render_template, request, url_for, Blueprint, flash, session
 from project.users.models import User
 from project.users.forms import UserForm, LoginForm
 from project import db, app
 from sqlalchemy.exc import IntegrityError
 from flask_login import login_user, logout_user, current_user, login_required
 from functools import wraps
-from project.decorators import login_required, prevent_login_signup, ensure_correct_user
+from project.decorators import prevent_login_signup
 
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
+
+
+def ensure_correct_user(fn):
+    @wraps(fn)
+    def wrapper(*args, **kwargs):
+        if kwargs.get('id') != current_user.id:
+            flash({'text': "Not Authorized", 'status': 'danger'})
+            return redirect(url_for('root'))
+        return fn(*args, **kwargs)
+
+    return wrapper
 
 
 @users_blueprint.route('/', methods=["GET"])

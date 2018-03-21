@@ -2,14 +2,14 @@ from functools import wraps
 from flask import redirect, url_for, session, flash
 
 
-def login_required(fn):
-    @wraps(fn)
-    def wrapper(*args, **kwargs):
-        if session.get('user_id') is None:
-            flash("Please log in first!")
-            return redirect(url_for("users.login"))
-        return fn(*args, **kwargs)
-    return wrapper
+# def login_required(fn):
+#     @wraps(fn)
+#     def wrapper(*args, **kwargs):
+#         if session.get('user_id') is None:
+#             flash("Please log in first!")
+#             return redirect(url_for("users.login"))
+#         return fn(*args, **kwargs)
+#     return wrapper
 
 
 def prevent_login_signup(fn):
