@@ -47,22 +47,11 @@ def load_user(id):
 
 @app.route('/')
 def root():
-    # current_user.following.all()
-    # messages = Message.query.order_by("timestamp asc").limit(100).all()
-
     followees = User.query.get(current_user.id).following.all()
     followee_ids = [f.id for f in followees] + [current_user.id]
-
-    # messages = Message.query.filter((Message.user_id.in_(
-    #     followee_ids)).order_by("timestamp desc").limit(100).all())
-
     messages = Message.query.filter((Message.user_id.in_(followee_ids)) | (
         Message.user_id == current_user.id)).order_by("timestamp desc").limit(
         100).all()
-
-    from IPython import embed
-    embed()
-
     return render_template('home.html', messages=messages, current_user=current_user)
 
 
