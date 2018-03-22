@@ -16,3 +16,6 @@ class Message(db.Model):
         self.text = text
         self.user_id = user_id
         self.timestamp = timestamp
+
+    def is_likedby(self, user):
+        return bool(self.likedby.filter_by(id=user.id).first())

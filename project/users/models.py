@@ -11,12 +11,12 @@ FollowersFollowee = db.Table(
     db.CheckConstraint('follower_id != followee_id', name="no_self_follow"))
 
 Likes = db.Table('likes', db.Column('id', db.Integer, primary_key=True),
-                 db.Column('liked_message', db.Integer,
-                           db.ForeignKey('messages.id')),
+                 db.Column('user_id', db.Integer,
+                           db.ForeignKey('users.id', ondelete="cascade")),
                  db.Column(
-                     'user_liked',
+                     'message_id',
                      db.Integer,
-                     db.ForeignKey('users.id'),
+                     db.ForeignKey('messages.id', ondelete="cascade"),
                      unique=True))
 
 
@@ -40,6 +40,11 @@ class User(db.Model, UserMixin):
         secondaryjoin=(FollowersFollowee.c.followee_id == id),
         backref=db.backref('following', lazy='dynamic'),
         lazy='dynamic')
+    likes = db.relationship("Message",
+                            secondary=Likes,
+                            backref=db.backref(
+                                'likedby', lazy='dynamic'),
+                            lazy='dynamic')
 
     def __init__(self,
                  email,
