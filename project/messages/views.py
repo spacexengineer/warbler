@@ -29,6 +29,20 @@ def new(id):
     return render_template('messages/new.html', form=MessageForm())
 
 
+@messages_blueprint.route('<int:message_id>/likes')
+@login_required
+def like(id, message_id):
+    liked_message = Message.query.get(message_id)
+    if request.method == 'POST':
+        Message.likes.append(current_user.id)
+    else:
+        Message.likes.remove(current_user.id)
+    db.session.add(liked_message)
+    db.session.commit()
+    return redirect(
+        url_for('messages.show', id=current_user.id, message_id=message_id))
+
+
 @messages_blueprint.route('/<int:message_id>', methods=["GET", "DELETE"])
 def show(id, message_id):
     found_message = Message.query.get(message_id)

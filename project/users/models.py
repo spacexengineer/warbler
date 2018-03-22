@@ -1,5 +1,6 @@
 from project import db, bcrypt
 from flask_login import UserMixin
+from project.messages.models import Message
 
 FollowersFollowee = db.Table(
     'follows', db.Column('id', db.Integer, primary_key=True),
@@ -8,6 +9,15 @@ FollowersFollowee = db.Table(
     db.Column('follower_id', db.Integer,
               db.ForeignKey('users.id', ondelete="cascade")),
     db.CheckConstraint('follower_id != followee_id', name="no_self_follow"))
+
+Likes = db.Table('likes', db.Column('id', db.Integer, primary_key=True),
+                 db.Column('liked_message', db.Integer,
+                           db.ForeignKey('messages.id')),
+                 db.Column(
+                     'user_liked',
+                     db.Integer,
+                     db.ForeignKey('users.id'),
+                     unique=True))
 
 
 class User(db.Model, UserMixin):
