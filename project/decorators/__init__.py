@@ -22,12 +22,12 @@ def prevent_login_signup(fn):
     return wrapper
 
 
-def ensure_correct_user(fn):
-    @wraps(fn)
-    def wrapper(*args, **kwargs):
-        correct_id = kwargs.get("id")
-        if correct_id != session.get("user_id"):
-            flash("Not authorized")
-            return redirect(url_for("users.index"))
-        return fn(*args, **kwargs)
-    return wrapper
+# def ensure_correct_user(fn):
+#     @wraps(fn)
+#     def wrapper(*args, **kwargs):
+#         correct_id = kwargs.get("id")
+#         if correct_id != session.get("user_id"):
+#             flash("Not authorized")
+#             return redirect(url_for("users.index"))
+#         return fn(*args, **kwargs)
+#     return wrapper
