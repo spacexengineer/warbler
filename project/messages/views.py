@@ -1,4 +1,4 @@
-from flask import redirect, render_template, request, url_for, Blueprint
+from flask import redirect, render_template, request, url_for, Blueprint, flash
 from project.messages.models import Message
 from project.users.views import ensure_correct_user
 from project.messages.forms import MessageForm
@@ -29,15 +29,17 @@ def new(id):
     return render_template('messages/new.html', form=MessageForm())
 
 
-@messages_blueprint.route('<int:message_id>/likes')
+@messages_blueprint.route('<int:message_id>/likes', methods=["GET", "POST", "DELETE"])
 @login_required
 def like(id, message_id):
     liked_message = Message.query.get(message_id)
     if request.method == 'POST':
-        Message.likes.append(current_user.id)
+        current_user.likes.append(liked_message)
+        db.session.add(liked_message)
+        from IPython import embed
+        embed()
     else:
-        Message.likes.remove(current_user.id)
-    db.session.add(liked_message)
+        current_user.likes.remove(liked_message)
     db.session.commit()
     return redirect(
         url_for('messages.show', id=current_user.id, message_id=message_id))

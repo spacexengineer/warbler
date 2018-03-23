@@ -120,9 +120,10 @@ def followers(id):
 @users_blueprint.route('/<int:id>', methods=["GET", "PATCH", "DELETE"])
 def show(id):
     found_user = User.query.get(id)
+    likes_num = len(current_user.likes.all())
     if (request.method == 'GET' or current_user.is_anonymous
             or current_user.get_id() != str(id)):
-        return render_template('users/show.html', user=found_user)
+        return render_template('users/show.html', user=found_user, likes_num=likes_num)
     if request.method == b"PATCH":
         form = UserForm(request.form)
         if form.validate():
